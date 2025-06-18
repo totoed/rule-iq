@@ -55,15 +55,25 @@ const LoginForm = ({
 
   const handleProviderSignIn = async (provider: "google" | "microsoft") => {
     setError(null);
+    setLoading(true);
+
     try {
       const { error } = await signInWithProvider(provider);
       if (error) {
-        setError(error.message);
+        console.error(`${provider} OAuth error:`, error);
+        setError(
+          `Failed to sign in with ${provider === "microsoft" ? "Microsoft" : "Google"}. Please try again.`,
+        );
+        setLoading(false);
       }
       // Note: Success is handled by the auth state change listener
+      // Don't set loading to false here as the redirect will happen
     } catch (err) {
-      setError("An unexpected error occurred with social login");
-      console.error(err);
+      console.error(`${provider} OAuth exception:`, err);
+      setError(
+        `An unexpected error occurred with ${provider === "microsoft" ? "Microsoft" : "Google"} login`,
+      );
+      setLoading(false);
     }
   };
 
@@ -86,6 +96,7 @@ const LoginForm = ({
               type="button"
               className="w-full flex items-center justify-center gap-2"
               onClick={() => handleProviderSignIn("google")}
+              disabled={loading}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -116,6 +127,7 @@ const LoginForm = ({
               type="button"
               className="w-full flex items-center justify-center gap-2"
               onClick={() => handleProviderSignIn("microsoft")}
+              disabled={loading}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

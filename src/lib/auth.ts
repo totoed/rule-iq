@@ -13,13 +13,18 @@ const getRedirectUrl = () => {
   // For development or preview environments
   const origin = window.location.origin;
 
+  // For Tempo development environment
+  if (origin.includes("tempo-dev.app")) {
+    return origin;
+  }
+
   // For Vercel deployments, ensure we're using https
   let redirectUrl = origin;
   if (origin.includes("vercel.app")) {
     redirectUrl = origin.replace("http://", "https://");
   }
 
-  console.log("Redirect URL:", redirectUrl);
+  console.log("OAuth Redirect URL:", redirectUrl);
   return redirectUrl;
 };
 
@@ -196,24 +201,46 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signInWithProvider = async (provider: "google" | "microsoft") => {
-    // Use the current URL as the base for the redirect
-    const currentUrl = window.location.origin;
-    const redirectTo = `${currentUrl}?showProfile=true`;
-
     try {
+      // Get the appropriate redirect URL based on environment
+      const redirectTo = getRedirectUrl();
+
       console.log(`Signing in with ${provider}, redirecting to: ${redirectTo}`);
+
+      // Configure provider-specific options
+      const providerOptions = {
+        redirectTo,
+        skipBrowserRedirect: false,
+        ...(provider === "google" && {
+          scopes: "openid profile email",
+          queryParams: {
+            access_type: "offline",
+            prompt: "consent",
+          },
+        }),
+        ...(provider === "microsoft" && {
+          scopes: "openid profile email User.Read",
+        }),
+      };
+
       const { error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo,
-          skipBrowserRedirect: false,
-          scopes: provider === "google" ? "profile email" : "user.read",
-        },
+        provider: provider === "microsoft" ? "azure" : provider,
+        options: providerOptions,
       });
-      return { error };
+
+      if (error) {
+        console.error(`OAuth error for ${provider}:`, error);
+        return { error };
+      }
+
+      return { error: null };
     } catch (error) {
       console.error(`Error signing in with ${provider}:`, error);
-      return { error: { message: `Failed to sign in with ${provider}` } };
+      return {
+        error: {
+          message: `Failed to sign in with ${provider}. Please try again.`,
+        },
+      };
     }
   };
 

@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import Home from "./components/home";
 import LandingPage from "./components/LandingPage";
+import ResourcesPage from "./components/ResourcesPage";
 import routes from "tempo-routes";
 import { AuthProvider } from "./lib/auth";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -85,6 +86,14 @@ function App() {
                     element={
                       <AnimatedRoute>
                         <Home />
+                      </AnimatedRoute>
+                    }
+                  />
+                  <Route
+                    path="/resources"
+                    element={
+                      <AnimatedRoute>
+                        <ResourcesPage />
                       </AnimatedRoute>
                     }
                   />

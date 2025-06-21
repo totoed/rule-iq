@@ -32,4 +32,15 @@ export interface StudyResource {
   type: "book" | "video" | "article" | "course";
 }
 
+export interface PDFResource {
+  id: string;
+  title: string;
+  description: string;
+  filename: string;
+  size: string;
+  pages: number;
+  category: string;
+  lastUpdated: string;
+}
+
 export type OAuthProvider = "google" | "microsoft";

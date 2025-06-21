@@ -1,12 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
-import { User, History, LogOut } from "lucide-react";
+import { User, History, LogOut, BookOpen } from "lucide-react";
 import BasketballIcon from "./BasketballIcon";
 
 interface AppHeaderProps {
   showHistoryButton?: boolean;
   showProfileButton?: boolean;
+  showResourcesButton?: boolean;
   onViewTestHistory?: () => void;
   onViewProfile?: () => void;
   onSignOut?: () => void;
@@ -15,6 +16,7 @@ interface AppHeaderProps {
 const AppHeader = ({
   showHistoryButton = false,
   showProfileButton = false,
+  showResourcesButton = true,
   onViewTestHistory = () => {},
   onViewProfile = () => {},
   onSignOut = () => {},
@@ -55,6 +57,18 @@ const AppHeader = ({
             <User className="h-4 w-4" />
             Profile
           </Button>
+        )}
+        {showResourcesButton && (
+          <Link to="/resources">
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-1 border-white/30 text-white hover:bg-white/10"
+            >
+              <BookOpen className="h-4 w-4" />
+              Resources
+            </Button>
+          </Link>
         )}
         <Button
           variant="outline"

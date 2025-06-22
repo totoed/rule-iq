@@ -37,12 +37,12 @@ const LandingPage: React.FC = () => {
           <span className="text-xl font-bold tracking-wider">RULE IQ</span>
         </Link>
         <nav className="hidden md:flex items-center space-x-8">
-          <a
-            href="#"
+          <Link
+            to="/"
             className="text-white/80 hover:text-white transition-colors text-sm font-medium tracking-wider"
           >
             HOME
-          </a>
+          </Link>
           <a
             href="#"
             className="text-white/80 hover:text-white transition-colors text-sm font-medium tracking-wider"
@@ -55,12 +55,12 @@ const LandingPage: React.FC = () => {
           >
             ABOUT
           </a>
-          <a
-            href="#"
+          <Link
+            to="/resources"
             className="text-white/80 hover:text-white transition-colors text-sm font-medium tracking-wider"
           >
             RESOURCES
-          </a>
+          </Link>
         </nav>
         <Link to="/signup">
           <Button className="bg-blue-600 text-white hover:bg-blue-700 rounded-full px-6 py-2 font-medium text-sm tracking-wider">
